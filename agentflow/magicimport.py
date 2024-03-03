@@ -12,7 +12,7 @@ def dynamic_import(directory_name):
     """
 
     parent = os.path.dirname
-    target_dir = parent(parent(parent(os.path.abspath(__file__))))
+    target_dir = parent(parent(os.path.abspath(__file__)))
 
     if target_dir not in sys.path:
         sys.path.append(target_dir)

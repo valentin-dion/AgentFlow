@@ -43,7 +43,7 @@ class Agent(metaclass=InstancesStore):
     def __call__(self, input_str:str):
         """
         """
-        ctx = {'agent': self, 'user_input': input_str, 'hops':0,'facts':Tool['LTM'].dump_facts()}
+        ctx = {'agent': self, 'user_input': input_str, 'hops':0}
         conv = Tool['tpl'](self.base_prompt, **ctx)
         # TODO aller chercher la conv correspondant an nom
         for mware in self._middlewares:
