@@ -1,14 +1,52 @@
 # AgentFlow
 > *It's the Nuxt of agentic* (a deepfake of Bill Gates)
 
-## What is AgentFlow ?
+## What is AgentFlow?
 
-**AgentFlow** is ~~a framework~~ more of a set of experiments at this point, but with the intention of becoming an actual framework. **AgentFlow** aims at being a low code framework.
+**AgentFlow** is a framework designed to facilitate the creation of agents for various tasks. Conceptually, an agent in AgentFlow is a function that takes inputs and produces outputs. It doesn't necessarily have to interact with a user. The framework is designed to be low code, reducing the amount of boilerplate code needed to create complex agents.
 
-## Why is AgentFlow ?
+## Why use AgentFlow?
 
-Any framework I've tried, if they let you implement agentic behavior, let you do so with verbosity, an no separation of concerns.
-AgentFlow let you define any agentic behavior with only necessary code. **AgentFlow** externalize avoidable complexity letting you focus on what matters.
+AgentFlow allows you to define any agentic behavior with only the necessary code. It externalizes avoidable complexity, letting you focus on what matters. This is achieved through the use of tools and middlewares.
+
+- **Tools**: These are functions that perform specific tasks. For example, a tool could be a function that parses text, executes a shell command, or interacts with a database. Here's an example of a tool that executes a shell command:
+
+```python
+from agentflow import tool
+import subprocess
+
+@tool
+def shell(command: str) -> str:
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if result.returncode != 0:
+        return f"Error: {result.stderr}"
+    return result.stdout
+```
+
+- **Middlewares (mw)**: These are functions that process the input and output of an agent. They can modify the input, the output, or both. Here's an example of a middleware that loops over a conversation:
+
+```python
+from agentflow import mw,Tool, Agent 
+
+@mw
+def lucy_loop(ctx, conv):
+    last_msg = conv[-1]
+    agentName, content = last_msg.content.split(':',1)
+    
+    if agentName == 'user':
+        return content
+    else:
+        try:
+            return conv.rehop(f"{agentName}:{Agent[agentName](content)}")
+        except:
+            return conv.rehop(f"{agentName} is sick today, please inform user he won't come to work")
+```
+
+- **Rehop**: This is a method of the Conversation class that creates a new conversation with an added message. It's used to continue the conversation with a new message from the agent. Here's how you can use it:
+
+```python
+new_conv = conv.rehop('New message from the agent')
+```
 # Good AI technical test
 ## TL;DR
 ### install
