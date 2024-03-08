@@ -9,6 +9,16 @@
 
 AgentFlow allows you to define any agentic behavior with only the necessary code. It externalizes avoidable complexity, letting you focus on what matters.
 
+## Use AgentFlow
+
+```shell
+git clone https://github.com/valentin-dion/AgentFlow.git
+cd AgentFlow
+pip install -e -U .
+```
+
+_____
+
 
 ## Agentic paradigms
 
