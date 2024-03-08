@@ -20,10 +20,12 @@ class Agent(metaclass=InstancesStore):
         :raises Exception: If an Agent with the given name already exists.
         """
 
-        #_DEBUG and print(f"init Agent {name} with {middlewares}")
+        _DEBUG and print(f"init Agent [green b]{name}[/] with [blue i]{middlewares}")
         self.name = name 
+        
         if name in Agent:
             raise Exception(f"Agent with name '{name}' already exists.")
+        
         Agent[name] = self
         
         self._middlewares = [MW[name.strip()] for name  in middlewares.split('|')]
@@ -35,6 +37,8 @@ class Agent(metaclass=InstancesStore):
 
         for file_path in glob.glob(pattern):
             return Conversation.from_file(file_path)
+        
+        raise FileNotFoundError(f"Did not find {self.name}.conv")
   
         
     def __repr__(self):
@@ -44,14 +48,17 @@ class Agent(metaclass=InstancesStore):
         """
         """
         ctx = {'agent': self, 'user_input': input_str, 'hops':0}
+        
+        #FIXME Should be done in a middleware
         conv = Tool['tpl'](self.base_prompt, **ctx)
-        # TODO aller chercher la conv correspondant an nom
+
         for mware in self._middlewares:
             
             conv = mware(ctx, conv)
 
             while isinstance(conv, Conversation) and conv.should_infer:
                 _DEBUG and print(f"🤖[blue u b]{self.name}[/]_____\n{conv[-3:]}")
+                #FIXME add a method that doesn't set should_infer to True
                 conv = conv.rehop(
                     Tool['llm'](conv, conv._llm),
                     'assistant'
@@ -59,4 +66,5 @@ class Agent(metaclass=InstancesStore):
                 ctx['hops'] += 1
                 conv.should_infer = False
                 conv = mware(ctx, conv)
+                
         return conv

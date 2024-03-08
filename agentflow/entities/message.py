@@ -37,5 +37,5 @@ class Message:
             'assistant':'🤖',
         }[self.role]
         
-        return f"Message({emoji}:{self.content})"
+        return f"Message({emoji}:{self.content})\n"
         

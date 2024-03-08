@@ -22,7 +22,7 @@ def on_stream(data):
 def stream_message(message, histo):
     """Generator function for the frontend library to consume the stream."""
     def launch(m):
-        Agent['Lucy'](m)
+        on_stream(Agent['Lucy'](m))
         on_stream('ENDOFSTUFF')
     th = threading.Thread(target=launch, args=(message,))
         

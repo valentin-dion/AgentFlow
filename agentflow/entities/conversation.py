@@ -54,10 +54,10 @@ class Conversation:
     @llm.setter
     def llm(self, value: str):
         self._llm = value
+        
     @property
     def msgs(self) -> List[Message]:
         return self._msgs
-    
 
     def __add__(self, msg: Message) -> 'Conversation':
         """Returns a new Conv instance with the given message added, as Conv instances are immutable."""
@@ -67,7 +67,6 @@ class Conversation:
     
     def __repr__(self):
         return '\n\n______________\n\n'.join(f"{m.role}:{m.content}" for m in self.msgs)
-
 
     def __getitem__(self, key):
         return deepcopy(self.msgs[key])

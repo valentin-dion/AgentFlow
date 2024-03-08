@@ -20,7 +20,7 @@ def llm(conversation: Conversation, model='gpt-4') -> Conversation:
 
 
 
-    response = client.chat.completions.create(model='gpt-4',
+    response = client.chat.completions.create(model=model,
             messages=conversation.openai(), 
             max_tokens=4000,
             temperature=0.5,
@@ -39,6 +39,7 @@ def llm(conversation: Conversation, model='gpt-4') -> Conversation:
             msg += mm
             onstream(msg) 
             _DEBUG and print(f"[red]{mm}",end='')
+            
             with open('./tmp/agentflow3.inf','w') as f:
                 f.write(msg)
     
